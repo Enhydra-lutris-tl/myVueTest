@@ -12,7 +12,7 @@
             <div class="todoText">{{list.title}}</div>
             </div>
 <!--            TODO:展示所选标签组-->
-            <div class="todoLabel">这有一堆标签</div>
+            <div class="todoLabel">这有一大堆标签</div>
           </div>
         </template>
 <!--        详细内容-->
