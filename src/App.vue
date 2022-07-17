@@ -264,10 +264,7 @@ canvas{
   position: absolute;
   top: 100%;
 }
-.fade-enter-to{
-  position: absolute;
-  top: 0;
-}
+.fade-enter-to,
 .fade-leave-from{
   position: absolute;
   top: 0;

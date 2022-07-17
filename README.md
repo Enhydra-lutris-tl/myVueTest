@@ -2,14 +2,12 @@
 vueTest
 ## 路由组件
 ```
-npm install
+pages目录
 ```
-
 ### 非路由组件
 ```
-npm run serve
+componets目录
 ```
-
 ### 主页功能
 ```
 1.个人信息展示
@@ -25,5 +23,3 @@ npm run serve
 2.记录个人学习笔记
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
