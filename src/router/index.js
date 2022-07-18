@@ -23,11 +23,12 @@ const router = createRouter({
         {
             path:'/IndexNotes',
             component:IndexNotes,
-            redirect:'/NoteContent',
+            redirect:'/IndexNotes/NoteContent/html',
             children:[
                 {
-                    path:'/NoteContent',
-                    component:NoteContent
+                    path:'NoteContent/:id',
+                    // name:'NoteContent',
+                    component:NoteContent,
                 }
             ]
         }

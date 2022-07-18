@@ -1,14 +1,13 @@
 <template>
   <div class="back">
     <div class="classNavigation">
-      <router-link to="NoteContent" class="classButton" active-class="active">html</router-link>
+      <router-link to="/IndexNotes/NoteContent/html" class="classButton" active-class="active">html</router-link>
       <button class="classButton">css</button>
       <button class="classButton">js</button>
-      <button class="classButton">vue</button>
+      <router-link to="/IndexNotes/NoteContent/post" class="classButton">postTest</router-link>
     </div>
     <router-view></router-view>
   </div>
-
 
 </template>
 

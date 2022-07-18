@@ -1,28 +1,17 @@
 <template>
     <div class="noteContent">
-      <h1>个人笔记</h1>
+      <h1>{{$route.params.id}}</h1>
 
       <el-collapse accordion style="width: 80%;margin:15px 0 0 10%" >
         <el-collapse-item
-            v-for="htmlNote in htmlNotes" :key="htmlNote.name"
-            :title="htmlNote.title"
-            :name="htmlNote.name"
-            :disabled="htmlNote.disabled"
+            v-for="newData in newDatas" :key="newData.id"
+            :name="newData.id"
         >
-          <div>{{htmlNote.titleText}}</div>
+          <template #title>
+            <div style="font-size: 18px;font-weight: bold">{{newData.name}}</div>
+          </template>
+          <div style="text-align: left">{{newData.body}}</div>
           <hr>
-          <div class="noteImg" v-show="htmlNote.noteImgUrls.length">
-            <h3>图片</h3>
-            <el-image
-                v-for="(noteImgUrl,index) in htmlNote.noteImgUrls" :key="index"
-                style="width: 80px;height: 80px;margin: 15px 10px 15px 10px"
-                :src="noteImgUrl"
-                fit=cover
-                :preview-src-list="htmlNote.noteImgUrls"
-            />
-            <hr>
-          </div>
-
           <div class="noteReply">
             <h3>评论内容</h3>
           </div>
@@ -37,20 +26,42 @@ export default {
   data(){
     return{
       htmlNotes:[
-          {title:'我曾经',name:'1',titleText:'笔记内容',disabled:false,
-            noteImgUrls:[
-                require('@/assets/slideImg1.jpeg'),
-                require('@/assets/slideImg2.jpeg'),
-                require('@/assets/slideImg3.jpeg'),
-            ]
-          },
-          {title:'一怒之下',name:'2',titleText:'笔记内容',disabled:false,noteImgUrls:[]},
-          {title:'吃了',name:'3',titleText:'笔记内容',disabled:false,noteImgUrls:[]},
-          {title:'三斤',name:'4',titleText:'笔记内容',disabled:false,noteImgUrls:[]},
-          {title:'核桃',name:'5',titleText:'笔记内容',disabled:false,noteImgUrls:[]},
+          {name:'我曾经',id:'1',body:'笔记内容'},
+          {name:'一怒之下',id:'2',body:'笔记内容'},
+          {name:'吃了',id:'3',body:'笔记内容'},
+          {name:'三斤',id:'4',body:'笔记内容'},
+          {name:'核桃',id:'5',body:'笔记内容'},
       ],
+      postData:[]
     }
+  },
+  computed:{
+    newDatas(){
+      var a = 0
+      if (this.$route.params.id === 'html'){
+        a = this.htmlNotes
+      }else {
+        a = this.postData
+      }
+      return a
+    }
+  },
+  methods:{
+    getJoke(){
+      this.axios.get(`http://jsonplaceholder.typicode.com/posts/${1}/comments`).then(
+          (response)=>{
+            this.postData = response.data
+          },
+          (error)=>{
+            console.log(error)
+          }
+      )
+    }
+  },
+  mounted() {
+    this.getJoke()
   }
+
 }
 </script>
 
