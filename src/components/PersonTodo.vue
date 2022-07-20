@@ -233,7 +233,7 @@
                 maxlength="2"
                 minlength="1"
                 @keyup.enter="tagAddSubmit"
-                style="width: 65%;margin-right: 5px"
+                style="width: 65%;"
             />
             <el-color-picker v-model="newTag.color" show-alpha/>
             <el-button class="tagAdd" type="success" @click="tagAddSubmit" v-show="!tagAddShow">提交</el-button>
@@ -339,15 +339,20 @@ export default {
     // 提交新建todo表单数据，并添加到lists中
     // TODO:id问题待解决
     newTodoSubmit(a){
-      let x = JSON.parse(JSON.stringify(this.newTodo))//对象的深度拷贝方法
-      x.todoTags = this.tagActive
-      this.lists.push(x)
-      this.newTodoChange(a)
-      for (let key in this.newTodo){
-        if (this.newTodo[key] !== this.newTodo['done']){
-          this.newTodo[key] = ''
+      if (this.newTodo.title === ''||this.newTodo.text === ''){
+        alert('标题或者内容为空，请补充')
+      }else {
+        let x = JSON.parse(JSON.stringify(this.newTodo))//对象的深度拷贝方法
+        x.todoTags = this.tagActive
+        this.lists.push(x)
+        this.newTodoChange(a)
+        for (let key in this.newTodo){
+          if (this.newTodo[key] !== this.newTodo['done']){
+            this.newTodo[key] = ''
+          }
         }
       }
+
     },
     //添加标签按钮
     tagAdd(){
@@ -461,7 +466,7 @@ h1{
   position: absolute;
   background: rgb(23, 23, 23);
   left: 5%;
-  top: calc(50%- 300px);
+  top: 25%;
   z-index: 2;
   width: 90%;
   height: auto;
@@ -489,8 +494,11 @@ h1{
   justify-content: space-between;
   align-items: center;
   width: 70%;
-  margin:10px 0 0 5px
-
+  height: 40px;
+  margin:10px 0 0 5px;
+  padding: 0 5px 0 5px;
+  border-radius: 4px;
+  border: solid 1px var(--el-border-color);
 }
 
 .newTodoButtonBox{
