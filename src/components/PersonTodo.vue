@@ -204,22 +204,41 @@
     <!--添加待办选项卡-->
 
     <div class="newTodoBox" id="newTodoBox" v-show="newTodoBoxShow">
-      <h3>添加</h3>
+      <h3 style="margin-top: 10px">添加</h3>
       <el-form :model="newTodo" style="width: 90%;margin: 15px 0 10px 5%">
         <!--填写标题-->
         <el-form-item label="标题">
-          <el-input v-model="newTodo.title"></el-input>
+          <el-input v-model="newTodo.title" style="width: 50%"></el-input>
         </el-form-item>
 
         <el-form-item label="选择一个标签">
-          <div class="tagBox" shadow="never">
+          <div class="tagBox">
             <tlTag
                 v-for="todoTag in todoTags" :key="todoTag.title"
                 :title="todoTag.title"
                 :color="todoTag.color"
                 @tagClick="tagClick"
-            ></tlTag>
+            >
+            </tlTag>
+
+            <el-tooltip content="点击创建新的标签!" placement="top">
+              <el-button class="tagAdd" type="success" @click="tagAdd" v-show="tagAddShow">添加+</el-button>
+            </el-tooltip>
+            <el-button class="tagAdd" type="danger" @click="tagAdd" v-show="!tagAddShow">取消</el-button>
           </div>
+          <div class="tagAddBox" v-show="!tagAddShow">
+            <el-input
+                placeholder="输入tag名"
+                v-model="newTag.title"
+                maxlength="2"
+                minlength="1"
+                @keyup.enter="tagAddSubmit"
+                style="width: 65%;margin-right: 5px"
+            />
+            <el-color-picker v-model="newTag.color" show-alpha/>
+            <el-button class="tagAdd" type="success" @click="tagAddSubmit" v-show="!tagAddShow">提交</el-button>
+          </div>
+
         </el-form-item>
 <!--        选择开始时间-->
         <el-form-item label="开始时间">
@@ -299,8 +318,11 @@ export default {
       },
       newTodoBoxShow:false,
       showHidden:false,
+      newTag:{title:'',color:'',tagChecked:false},
+      tagAddShow:true
     }
   },
+
   computed:{
     noTodo(){
       return this.lists.filter(a=>a.done!==true)
@@ -312,13 +334,13 @@ export default {
       return this.todoTags.filter(a=>a.tagChecked===true)
     }
   },
+
   methods:{
     // 提交新建todo表单数据，并添加到lists中
     // TODO:id问题待解决
     newTodoSubmit(a){
       let x = JSON.parse(JSON.stringify(this.newTodo))//对象的深度拷贝方法
       x.todoTags = this.tagActive
-      console.log(x)
       this.lists.push(x)
       this.newTodoChange(a)
       for (let key in this.newTodo){
@@ -327,12 +349,32 @@ export default {
         }
       }
     },
+    //添加标签按钮
+    tagAdd(){
+      this.tagAddShow = !this.tagAddShow
+    },
+    //添加tag----提交
+    tagAddSubmit(){
+      if (this.newTag.title === ''){
+        alert('请填写tag标题')
+      }else {
+        let x = JSON.parse(JSON.stringify(this.newTag))
+        this.todoTags.push(x)
+        for (let key in this.newTag){
+          if (this.newTag[key] !== this.newTag['tagChecked']){
+            this.newTag[key] = ''
+          }
+        }
+        this.tagAdd()
+      }
+
+    },
+
     //tag触发事件
     tagClick(a,b){
       for (var i=0; i < this.todoTags.length;i++){
         if (this.todoTags[i].title===b){
           this.todoTags[i].tagChecked = a
-          console.log(this.todoTags[i].tagChecked)
         }
       }
     },
@@ -341,9 +383,8 @@ export default {
       this.newTodoBoxShow = a
     },
     // 编辑todo
-    todoEdit(id){
+    todoEdit(){
       this.showHidden = true
-      console.log(id)
     },
     //保存todo
     todoSave(){
@@ -418,21 +459,41 @@ h1{
 .newTodoBox{
   /*display: none;*/
   position: absolute;
-  background: rgba(23, 23, 23, 0.9);
-  left: calc(50% - 150px);
-  top: 10%;
+  background: rgb(23, 23, 23);
+  left: 5%;
+  top: calc(50%- 300px);
   z-index: 2;
-  width: 300px;
+  width: 90%;
   height: auto;
   border-radius: 8px;
   transition: 0.3s;
 }
+
 .tagBox{
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   width: 100%;
 }
-.newTodoBox button{
+
+.tagAdd{
+  height: 18px;
+  width: 58px;
+  margin-left: 10px;
+  border-radius: 4px;
+  border: white solid 1px;
+  font-size: 12px;
+}
+.tagAddBox{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 70%;
+  margin:10px 0 0 5px
+
+}
+
+.newTodoButtonBox{
   width: 50px;
   height: 30px;
   font-size: 12px;

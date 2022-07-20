@@ -1,5 +1,5 @@
 <template>
- <div class="tagBox">
+ <div class="tagButton">
    <input
        type="checkbox"
        :id="title"
@@ -33,12 +33,14 @@ export default {
         this.$refs.tagLabel.style.border = 'none'
       }
     }
-
   }
 }
 </script>
 
 <style scoped>
+.tagButton{
+  margin: 0 5px 0 5px;
+}
 .tagLabel{
   display: block;
   height: 20px;
