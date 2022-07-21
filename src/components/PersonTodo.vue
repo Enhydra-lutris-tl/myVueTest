@@ -1,9 +1,11 @@
 <template>
   <div class="todoBox">
     <h1>My Todos</h1>
+    <h4 v-show="!noTodo.length" class="todoMessage">{{todoMessage}}</h4>
     <el-collapse
         accordion
         style="width: 90%;margin: 15px 5% 0 5%"
+        v-show="noTodo.length"
     >
       <el-collapse-item v-for="list in noTodo" :key="list.id" :disabled="showHidden">
         <!--自定义标题-->
@@ -24,7 +26,6 @@
                   style="height: 60%;width: 200px;margin-left: 10px"
               />
             </div>
-            <!--TODO:展示所选标签组-->
             <div class="todoLabel">
               <el-tag
                   v-for="tag in list.todoTags" :key="tag.title"
@@ -115,7 +116,6 @@
           </el-descriptions>
 
           <el-button-group style="margin: 15px 5% 0 0">
-            <!--TODO:尝试用动态路由的方式和创建共同调用一个组件-->
             <el-button
               type="primary"
               :disabled="showHidden"
@@ -218,6 +218,7 @@
                 :title="todoTag.title"
                 :color="todoTag.color"
                 @tagClick="tagClick"
+                @tagsDelete="tagsDelete(todoTag.title)"
             >
             </tlTag>
 
@@ -280,28 +281,30 @@
 
 <script>
 import tlTag from '@/components/tlTag'
+import {ElMessage} from "element-plus";
 export default {
   name: "PersonTodo",
   components: {tlTag},
   data(){
     return{
-      lists:[
-        {id:'001',
-          title:'吃饭',
-          text:'描述说明',
-          startTime:'2022/07/21 00:00:00',
-          endTime:'2022/07/21 00:00:00',
-          done:false,
-          overTime:'2022/07/21 00:00:00',
-          todoTags:[]
-        },
-
-      ],
-      todoTags:[
-          {title:'工作',color:'#67C23A',tagChecked:false},
-          {title:'个人',color:'#E6A23C',tagChecked:false},
-          {title:'日常',color:'#909399',tagChecked:false},
-      ],
+      // lists:[
+      //   {id:'001',
+      //     title:'吃饭',
+      //     text:'描述说明',
+      //     startTime:'2022/07/21 00:00:00',
+      //     endTime:'2022/07/21 00:00:00',
+      //     done:false,
+      //     overTime:'2022/07/21 00:00:00',
+      //     todoTags:[]
+      //   },
+      // ],
+      lists:JSON.parse(localStorage.getItem('lists')),
+      // todoTags:[
+      //     {title:'工作',color:'#67C23A',tagChecked:false},
+      //     {title:'个人',color:'#E6A23C',tagChecked:false},
+      //     {title:'日常',color:'#909399',tagChecked:false},
+      // ],
+      todoTags:JSON.parse(localStorage.getItem('todoTags')),
       defaultTime:[
           new Date(2000,1,1,0,0,0),
           new Date(2000,1,1,23,59,59)
@@ -332,27 +335,36 @@ export default {
     },
     tagActive(){
       return this.todoTags.filter(a=>a.tagChecked===true)
+    },
+    todoMessage(){
+      return (this.overTodo.length)?'待办全部完成！':'暂无待办，欢迎新建！'
     }
   },
 
   methods:{
     // 提交新建todo表单数据，并添加到lists中
-    // TODO:id问题待解决
     newTodoSubmit(a){
+      // 判断标题和内容是否为空，阻止提交
       if (this.newTodo.title === ''||this.newTodo.text === ''){
         alert('标题或者内容为空，请补充')
       }else {
-        let x = JSON.parse(JSON.stringify(this.newTodo))//对象的深度拷贝方法
+        let x = JSON.parse(JSON.stringify(this.newTodo))// 对象的深度拷贝方法
         x.todoTags = this.tagActive
-        this.lists.push(x)
-        this.newTodoChange(a)
-        for (let key in this.newTodo){
-          if (this.newTodo[key] !== this.newTodo['done']){
-            this.newTodo[key] = ''
+        x.id = JSON.stringify(Math.random()*Math.random()*100)
+        // 判断用户所选Tag数是否大于2，阻止提交
+        if (x.todoTags.length > 2){
+          alert('选择Tag数大于2，请精简！')
+        }else {
+          this.lists.push(x)
+          this.newTodoChange(a)
+          for (let key in this.newTodo){
+            if (this.newTodo[key] !== this.newTodo['done']){
+              this.newTodo[key] = ''
+            }
           }
+          localStorage.setItem('lists',JSON.stringify(this.lists))
         }
       }
-
     },
     //添加标签按钮
     tagAdd(){
@@ -360,24 +372,39 @@ export default {
     },
     //添加tag----提交
     tagAddSubmit(){
-      if (this.newTag.title === ''){
-        alert('请填写tag标题')
-      }else {
+      if (this.newTag.title === ''||this.newTag.color === ''){
+        alert('标题或颜色不能为空')
+      }else{
         let x = JSON.parse(JSON.stringify(this.newTag))
         this.todoTags.push(x)
+        ElMessage({
+          message:`Tag:[${this.newTag.title}]已添加`,
+          type:'success'
+        })
+        localStorage.setItem('todoTags',JSON.stringify(this.todoTags))
         for (let key in this.newTag){
           if (this.newTag[key] !== this.newTag['tagChecked']){
             this.newTag[key] = ''
           }
         }
+
         this.tagAdd()
       }
 
     },
+    //删除tag,自定义事件
+    tagsDelete(title){
+      this.todoTags = this.todoTags.filter(a=>a.title!==title)
+      localStorage.setItem('todoTags',JSON.stringify(this.todoTags))
+      ElMessage({
+        message:`Tag:[${title}]已删除`,
+        type:'warning'
+      })
+    },
 
     //tag触发事件
     tagClick(a,b){
-      for (var i=0; i < this.todoTags.length;i++){
+      for (let i=0; i < this.todoTags.length;i++){
         if (this.todoTags[i].title===b){
           this.todoTags[i].tagChecked = a
         }
@@ -390,16 +417,32 @@ export default {
     // 编辑todo
     todoEdit(){
       this.showHidden = true
+      // localStorage.setItem('lists',JSON.stringify(this.lists))
     },
     //保存todo
     todoSave(){
       this.showHidden = false
+      localStorage.setItem('lists',JSON.stringify(this.lists))
+      ElMessage({
+        message:`改动已保存！`,
+        type:'success'
+      })
     },
     // 删除todo
     todoDelete(id){
       // splice方法删除数组指定位置和指定数量的元素
       if (confirm('是否删除！')){
         this.lists = this.lists.filter(a=>a.id!==id)
+        localStorage.setItem('lists',JSON.stringify(this.lists))
+        ElMessage({
+          message:`所选TODO已删除！！！`,
+          type:'warning'
+        })
+      }else {
+        ElMessage({
+          message: `删除操作终止！`,
+          type: 'message'
+        })
       }
     },
     // 将已完成的todo移到已完成列表中
@@ -410,6 +453,7 @@ export default {
           this.lists[i].done = true
         }
       }
+      localStorage.setItem('lists',JSON.stringify(this.lists))
     },
   }
 
@@ -430,6 +474,11 @@ h1{
   font-weight: bold;
   color: white;
 }
+
+.todoMessage{
+  margin-top: 15px;
+}
+
 .titleBox,
 .overviewBox{
   display: flex;
@@ -478,13 +527,14 @@ h1{
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  flex-wrap: wrap;
   width: 100%;
 }
 
 .tagAdd{
   height: 18px;
   width: 58px;
-  margin-left: 10px;
+  margin: 5px 0 0 10px;
   border-radius: 4px;
   border: white solid 1px;
   font-size: 12px;

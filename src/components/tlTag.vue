@@ -1,5 +1,5 @@
 <template>
- <div class="tagButton">
+ <div class="tagButton" ref="tagLabel">
    <input
        type="checkbox"
        :id="title"
@@ -8,7 +8,8 @@
        @change="tagChange"
        ref="checkbox"
    />
-   <label :for="title" class="tagLabel" ref="tagLabel">{{title}}</label>
+   <label :for="title" class="tagLabel" >{{title}}</label>
+   <button type="button" class="tagDelete" @click="tagDelete" v-show="!modelValue">x</button>
  </div>
 </template>
 
@@ -32,14 +33,23 @@ export default {
       }else {
         this.$refs.tagLabel.style.border = 'none'
       }
+    },
+    tagDelete(){
+      if (confirm('是否删除标签？删除后不可恢复！')){
+        this.$emit('tagsDelete')
+      }
     }
+
   }
 }
 </script>
 
 <style scoped>
 .tagButton{
-  margin: 0 5px 0 5px;
+  display: flex;
+  margin: 5px 5px 0 5px;
+  border-radius: 4px;
+  border: solid 1px var(--el-border-color);
 }
 .tagLabel{
   display: block;
@@ -48,5 +58,17 @@ export default {
   border-radius: 4px;
   line-height: 20px;
   font-size: 12px;
+}
+.tagDelete{
+  border: none;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  margin-left: 5px;
+  border-radius: 4px;
+  background: #606266;
+}
+.tagDelete:hover{
+  background: #909399;
 }
 </style>

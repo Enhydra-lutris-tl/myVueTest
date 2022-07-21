@@ -16,4 +16,7 @@ import router from './router'
 import axios from 'axios'
 import VueAxios from "vue-axios";
 
-createApp(App).use(ElementPlus,{size:'small',zIndex:3000}).use(router).use(VueAxios,axios).mount('#app')
+createApp(App).use(ElementPlus,{size:'small',zIndex:3000})
+    .use(router)
+    .use(VueAxios,axios)
+    .mount('#app')
