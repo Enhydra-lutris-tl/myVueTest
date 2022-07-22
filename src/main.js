@@ -16,7 +16,12 @@ import router from './router'
 import axios from 'axios'
 import VueAxios from "vue-axios";
 
-createApp(App).use(ElementPlus,{size:'small',zIndex:3000})
+//引入echarts 插件
+import * as echarts from 'echarts'
+
+const app = createApp(App)
+app.config.globalProperties.$echarts = echarts
+app.use(ElementPlus,{size:'small',zIndex:3000})
     .use(router)
     .use(VueAxios,axios)
     .mount('#app')

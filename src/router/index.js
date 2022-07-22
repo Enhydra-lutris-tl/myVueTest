@@ -14,7 +14,7 @@ const router = createRouter({
         },
         {
             path:'/IndexHomePage',
-            component:IndexHomePage
+            component:IndexHomePage,
         },
         {
             path:'/IndexBody',

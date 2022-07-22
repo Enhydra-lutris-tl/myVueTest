@@ -2,16 +2,11 @@
   <div class="todoBox">
     <h1>My Todos</h1>
     <h4 v-show="!noTodo.length" class="todoMessage">{{todoMessage}}</h4>
-    <el-collapse
-        accordion
-        style="width: 90%;margin: 15px 5% 0 5%"
-        v-show="noTodo.length"
-    >
+    <el-collapse accordion style="width: 90%;margin: 15px 5% 0 5%" v-show="noTodo.length">
       <el-collapse-item v-for="list in noTodo" :key="list.id" :disabled="showHidden">
         <!--自定义标题-->
         <template #title>
           <div class="titleBox">
-
             <div class="overviewBox">
               <el-checkbox
                   v-show="!showHidden"
@@ -20,12 +15,14 @@
                   size="large"
               />
               <div class="todoText" v-show="!showHidden">{{list.title}}</div>
+
               <el-input
                   v-show="showHidden"
                   v-model="list.title"
                   style="height: 60%;width: 200px;margin-left: 10px"
               />
             </div>
+
             <div class="todoLabel">
               <el-tag
                   v-for="tag in list.todoTags" :key="tag.title"
@@ -146,7 +143,7 @@
         <template #title>
           <div class="titleBox">
             <div class="overviewBox">
-            <input type="checkbox" @click="todoOver(list.id)" v-model="list.done">
+            <input type="checkbox" @click="noTodoOver(list.id)" v-model="list.done">
             <div class="todoText">{{list.title}}</div>
             </div>
             <div class="todoLabel">
@@ -160,12 +157,10 @@
             </div>
           </div>
         </template>
-<!--        详细内容-->
+        <!--详细内容-->
         <div class="todoTextBox">
-          <el-descriptions border
-                           style="width: 90%;margin: 15px 0 0 5%"
-          >
-<!--            开始时间-->
+          <el-descriptions border style="width: 90%;margin: 15px 0 0 5%">
+            <!--开始时间-->
             <el-descriptions-item
               label="开始时间"
               label-align="center"
@@ -194,15 +189,26 @@
       </el-collapse-item>
     </el-collapse>
 
-    <el-button type="success"
-               size="large"
-               style="position: absolute;right: 5%;bottom: 15px"
-               @click="newTodoChange(true)">
+    <el-button
+        type="success"
+        size="large"
+        style="position: absolute;right: calc(5% + 73px);bottom: 15px"
+    >
+      统计
+    </el-button>
+    <el-button
+        type="success"
+        size="large"
+        style="position: absolute;right: 5%;bottom: 15px"
+        @click="newTodoChange(true)"
+    >
       创建
     </el-button>
 
     <!--添加待办选项卡-->
+    <div class="todoStatisticsBox" id="todoStatisticsBox">
 
+    </div>
     <div class="newTodoBox" id="newTodoBox" v-show="newTodoBoxShow">
       <h3 style="margin-top: 10px">添加</h3>
       <el-form :model="newTodo" style="width: 90%;margin: 15px 0 10px 5%">
@@ -285,6 +291,14 @@ import {ElMessage} from "element-plus";
 export default {
   name: "PersonTodo",
   components: {tlTag},
+  mounted() {
+    var t1
+    clearInterval(t1)
+    var todoOvers = this.$echarts.init(document.getElementById('todoStatisticsBox'))
+    t1 = setInterval(()=>{
+      todoOvers.setOption(this.option)
+    },1000)
+  },
   data(){
     return{
       // lists:[
@@ -338,7 +352,31 @@ export default {
     },
     todoMessage(){
       return (this.overTodo.length)?'待办全部完成！':'暂无待办，欢迎新建！'
+    },
+    option(){
+      const a = this.lists
+      const b = a.filter(x=>x.done === true)
+      const c = a.length - b.length
+      return {
+      series: [
+        {
+          type: 'pie',
+          data: [
+            {
+              value: b.length,
+              name: '已完成'
+            },
+            {
+              value: c,
+              name: '未完成'
+            }
+          ],
+          radius: '70%'
+        }
+      ]
     }
+    }
+
   },
 
   methods:{
@@ -445,16 +483,26 @@ export default {
         })
       }
     },
-    // 将已完成的todo移到已完成列表中
+    // 将未完成的todo移到已完成列表中
     todoOver(id){
       for (let i = 0; i < this.lists.length; i++){
-        if (this.lists[i].id === id){
-          this.lists[i].overTime = new Date().toLocaleString()
+        if (this.lists[i].id === id && this.lists[i].done === false){
           this.lists[i].done = true
+          this.lists[i].overTime = new Date().toLocaleString()
         }
       }
       localStorage.setItem('lists',JSON.stringify(this.lists))
     },
+    // 将已完成的todo移到未完成列表中
+    noTodoOver(id){
+      for (let i = 0; i < this.lists.length; i++){
+        if (this.lists[i].id === id && this.lists[i].done === true){
+            this.lists[i].overTime = ''
+            this.lists[i].done = false
+        }
+      }
+      localStorage.setItem('lists',JSON.stringify(this.lists))
+    }
   }
 
 
@@ -470,9 +518,19 @@ export default {
   border-radius: 8px;
   background: rgb(32,32,32);
 }
+
 h1{
   font-weight: bold;
   color: white;
+}
+
+.todoStatisticsBox{
+  position: relative;
+  z-index: 1;
+  width: 90%;
+  margin: 15px 0 0 5%;
+  border-radius: 8px;
+  height: 500px;
 }
 
 .todoMessage{
@@ -490,9 +548,6 @@ h1{
   justify-content: space-between;
 }
 
-/*input[type = checkbox]{*/
-/*  width: 20px;*/
-/*}*/
 .todoTextBox{
   text-align: right;
 }
@@ -511,7 +566,6 @@ h1{
 }
 
 .newTodoBox{
-  /*display: none;*/
   position: absolute;
   background: rgb(23, 23, 23);
   left: 5%;

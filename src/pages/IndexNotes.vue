@@ -4,7 +4,7 @@
       <router-link to="/IndexNotes/NoteContent/html" class="classButton" active-class="active">html</router-link>
       <button class="classButton">css</button>
       <button class="classButton">js</button>
-      <router-link to="/IndexNotes/NoteContent/post" class="classButton">postTest</router-link>
+      <router-link to="/IndexNotes/NoteContent/post" class="classButton" active-class="active">postTest</router-link>
     </div>
     <router-view></router-view>
   </div>
