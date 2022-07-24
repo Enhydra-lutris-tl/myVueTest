@@ -193,6 +193,7 @@
         type="success"
         size="large"
         style="position: absolute;right: calc(5% + 73px);bottom: 15px"
+        @click="todoStatisticsShowing"
     >
       统计
     </el-button>
@@ -206,7 +207,19 @@
     </el-button>
 
     <!--添加待办选项卡-->
-    <div class="todoStatisticsBox" id="todoStatisticsBox">
+    <div class="todoStatisticsBack" v-show="todoStatisticsShow">
+      <div class="todoStatisticsTip">
+        <h4 style="margin:10px 0 10px 0">完成情况</h4>
+        <el-descriptions
+            :column = "1"
+            border
+            style="width: 90%;margin-left: 5%"
+        >
+          <el-descriptions-item label="未完成占比:">{{option[1].noTodo}}%</el-descriptions-item>
+          <el-descriptions-item label="已完成占比:">{{option[1].overTodo}}%</el-descriptions-item>
+        </el-descriptions>
+      </div>
+      <div class="todoStatisticsBox" id="todoStatisticsBox"></div>
 
     </div>
     <div class="newTodoBox" id="newTodoBox" v-show="newTodoBoxShow">
@@ -296,8 +309,9 @@ export default {
     clearInterval(t1)
     var todoOvers = this.$echarts.init(document.getElementById('todoStatisticsBox'))
     t1 = setInterval(()=>{
-      todoOvers.setOption(this.option)
+      todoOvers.setOption(this.option[0])
     },1000)
+    this.todoStatisticsShowing()
   },
   data(){
     return{
@@ -336,7 +350,8 @@ export default {
       newTodoBoxShow:false,
       showHidden:false,
       newTag:{title:'',color:'',tagChecked:false},
-      tagAddShow:true
+      tagAddShow:true,
+      todoStatisticsShow:true
     }
   },
 
@@ -357,24 +372,40 @@ export default {
       const a = this.lists
       const b = a.filter(x=>x.done === true)
       const c = a.length - b.length
-      return {
-      series: [
-        {
-          type: 'pie',
-          data: [
-            {
-              value: b.length,
-              name: '已完成'
-            },
-            {
-              value: c,
-              name: '未完成'
-            }
-          ],
-          radius: '70%'
-        }
+      return [{
+        title:{
+          text:'待办完成率',
+          left:'center',
+          textStyle:{
+            color: 'white'
+          }
+        },
+        tooltip:{
+          show:true,
+          trigger:'item',
+          triggerOn:'mousemove|click',
+          // backgroundColor:'white',
+        },
+        series: [
+          {
+            type: 'pie',
+            stillShowZeroSum: false,
+            data: [
+              {
+                value: b.length,
+                name: '已完成'
+              },
+              {
+                value: c,
+                name: '未完成'
+              }
+            ],
+            radius:'50%'
+          }
+        ]
+      },
+        {noTodo:c/a.length*100,overTodo:b.length/a.length*100}
       ]
-    }
     }
 
   },
@@ -502,6 +533,10 @@ export default {
         }
       }
       localStorage.setItem('lists',JSON.stringify(this.lists))
+    },
+    //统计图显示和隐藏
+    todoStatisticsShowing(){
+      this.todoStatisticsShow = !this.todoStatisticsShow
     }
   }
 
@@ -523,14 +558,33 @@ h1{
   font-weight: bold;
   color: white;
 }
-
-.todoStatisticsBox{
+.todoStatisticsBack{
   position: relative;
-  z-index: 1;
+  height: 300px;
   width: 90%;
   margin: 15px 0 0 5%;
+  background: rgb(42,39,39);
   border-radius: 8px;
-  height: 500px;
+}
+.todoStatisticsTip{
+  position: absolute;
+  background: #141414;
+  border-radius: 4px;
+  left: 10px;
+  top: 10px;
+  width: 40%;
+  height: calc(100% - 20px);
+}
+.todoStatisticsBox{
+  position: absolute;
+  background: #141414;
+  z-index: 1;
+  right: 10px;
+  top: 10px;
+  padding-top: 10px;
+  width: 55%;
+  height: calc(100% - 30px);
+  border-radius: 4px;
 }
 
 .todoMessage{
