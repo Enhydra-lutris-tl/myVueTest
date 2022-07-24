@@ -3,6 +3,7 @@ import IndexHomePage from '../pages/IndexHomePage'
 import IndexBody from "@/pages/IndexBody";
 import IndexNotes from "@/pages/IndexNotes"
 import NoteContent from "@/pages/NoteContent";
+import IndexGames from "@/pages/IndexGames";
 const routerWebHistory = createWebHistory()
 
 const router = createRouter({
@@ -31,6 +32,10 @@ const router = createRouter({
                     component:NoteContent,
                 }
             ]
+        },
+        {
+            path:'/IndexGames',
+            component:IndexGames,
         }
 
     ]

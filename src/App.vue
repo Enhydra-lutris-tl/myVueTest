@@ -3,6 +3,7 @@
     <router-link to='/IndexBody' class="navigationButton" active-class="active">首页</router-link>
     <router-link to='/IndexHomePage' class="navigationButton" active-class="active">主页</router-link>
     <router-link to="/IndexNotes" class="navigationButton" active-class="active">笔记</router-link>
+    <router-link to="/IndexGames" class="navigationButton" active-class="active">游戏</router-link>
   </div>
   <router-view v-slot="{Component}">
     <transition name="fade" >
@@ -237,7 +238,6 @@ canvas{
   justify-content: space-between;
   flex-direction: column;
   width: 50px;
-  height: 200px;
   border-radius: 4px;
   right: 2%;
   top: 50%;

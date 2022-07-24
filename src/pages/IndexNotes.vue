@@ -33,7 +33,6 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 18%;
-  height: auto;
   background: rgb(32,32,32);
   margin: 0 1% 0 18%;
 }

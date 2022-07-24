@@ -615,7 +615,7 @@ h1{
 .todoOverTitle{
   color: white;
   font-weight: bold;
-  margin: 15px 0 0 15px;
+  margin: 15px 0 0 5%;
   text-align: left;
 }
 
