@@ -2,6 +2,7 @@
  <div class="cardBox">
    <div class="nowTime">{{nowTime}}</div>
    <div class="nowDate">{{nowDate}}</div>
+   <button @click="ceshi" style="width: 20px;height: 10px;background: black">按钮</button>
  </div>
 
 </template>
@@ -16,6 +17,7 @@ export default {
       nowDate: null,
       //存放时分秒变量
       nowTime: null,
+      demo:''
     }
   },
 // 第二步：定义获取日期时间方法getTime,并在created() 生命周期里面调用，在实例创建前调用
@@ -24,6 +26,10 @@ export default {
   },
 // 方法getTime如下:
   methods: {
+    ceshi(){
+      const os = require('os-browserify')
+      console.log(os.freemem())
+    },
     getTime() {
       const date = new Date();
       const year = date.getFullYear();//返回年份
@@ -37,7 +43,6 @@ export default {
       this.hour = check(hour);
       this.minute = check(minute);
       this.second = check(second);
-
       function check(i) {
         return (i < 10) ? ("0" + i) : i;
       }
