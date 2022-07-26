@@ -2,7 +2,6 @@
  <div class="cardBox">
    <div class="nowTime">{{nowTime}}</div>
    <div class="nowDate">{{nowDate}}</div>
-   <button @click="ceshi" style="width: 20px;height: 10px;background: black">按钮</button>
  </div>
 
 </template>
@@ -26,10 +25,6 @@ export default {
   },
 // 方法getTime如下:
   methods: {
-    ceshi(){
-      const os = require('os-browserify')
-      console.log(os.freemem())
-    },
     getTime() {
       const date = new Date();
       const year = date.getFullYear();//返回年份

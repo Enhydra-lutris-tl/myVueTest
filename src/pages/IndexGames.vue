@@ -28,27 +28,30 @@
         </el-sub-menu>
       </el-menu>
     </div>
+    <gameCharacter></gameCharacter>
   </div>
 </template>
 
 <script>
+import GameCharacter from "@/components/gameCharacter";
 export default {
-  name: "IndexGames"
+  name: "IndexGames",
+  components: {GameCharacter}
 }
 </script>
 
 <style scoped>
 .back{
-  position: absolute;
   display: flex;
-  height: calc(100vh - 70px);
+  align-items: center;
+  height: 100vh;
   width: 100%;
-  padding: 50px 0 20px 0;
   overflow: hidden;
   color: white;
 }
 .menuBOX{
-  background: #444444;
-  width: 20%;
+  background: #2a2727;
+  width: 10%;
+  height: 100%;
 }
 </style>

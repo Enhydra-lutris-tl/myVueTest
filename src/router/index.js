@@ -4,6 +4,7 @@ import IndexBody from "@/pages/IndexBody";
 import IndexNotes from "@/pages/IndexNotes"
 import NoteContent from "@/pages/NoteContent";
 import IndexGames from "@/pages/IndexGames";
+import GameFunctionBranch from '@/pages/GameFunctionBranch'
 const routerWebHistory = createWebHistory()
 
 const router = createRouter({
@@ -36,6 +37,13 @@ const router = createRouter({
         {
             path:'/IndexGames',
             component:IndexGames,
+            redirect:'/IndexGames/GameFunctionBranch/1',
+            children:[
+                {
+                    path: 'GameFunctionBranch/:id',
+                    component: GameFunctionBranch,
+                }
+            ]
         }
 
     ]
