@@ -1,10 +1,16 @@
 <template>
-  <div class="navigationBox">
-    <router-link to='/IndexBody' class="navigationButton" active-class="active">首页</router-link>
-    <router-link to='/IndexHomePage' class="navigationButton" active-class="active">主页</router-link>
-    <router-link to="/IndexNotes" class="navigationButton" active-class="active">笔记</router-link>
-    <router-link to="/IndexGames" class="navigationButton" active-class="active">游戏</router-link>
+  <div class="navigationBigBox" ref="navigationBigBox">
+    <div class="unfoldButton" @click="navigationShrink">
+      <div>&lt;</div>
+    </div>
+    <div class="navigationBox" v-show="mm">
+      <router-link to='/IndexBody' class="navigationButton" active-class="active">首页</router-link>
+      <router-link to='/IndexHomePage' class="navigationButton" active-class="active">主页</router-link>
+      <router-link to="/IndexNotes" class="navigationButton" active-class="active">笔记</router-link>
+      <router-link to="/IndexGames" class="navigationButton" active-class="active">游戏</router-link>
+    </div>
   </div>
+
   <router-view v-slot="{Component}">
     <transition name="fade" >
       <component :is="Component"/>
@@ -25,7 +31,8 @@ export default {
   data(){
     return{
       width:document.documentElement.clientWidth,
-      height:document.documentElement.clientHeight
+      height:document.documentElement.clientHeight,
+      mm:false
     }
   },
   mounted() {
@@ -34,6 +41,16 @@ export default {
   },
   // 鼠标时间
   methods: {
+    navigationShrink(){
+      if (this.mm === false){
+        this.$refs.navigationBigBox.style.right = '2%'
+        this.mm = true
+      }else if (this.mm === true){
+        this.$refs.navigationBigBox.style.right = '0'
+        this.mm = false
+      }
+
+    },
     yiru() {
       var box = document.getElementById('box')
       var yuandian = document.getElementById('yuandian')
@@ -231,16 +248,30 @@ canvas{
   border-radius: 50%;
   background: white;
 }
-.navigationBox{
+.navigationBigBox{
   position: absolute;
+  display: flex;
   z-index: 3;
+  right: 0;
+  top: 50%;
+  transition: right 1s;
+}
+.unfoldButton{
+  height: 60px;
+  width: 20px;
+  background: rgb(32,32,32);
+}
+.unfoldButton div{
+  margin-top: 20px;
+  height: 20px;
+  line-height: 20px;
+}
+.navigationBox{
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   width: 50px;
   border-radius: 4px;
-  right: 2%;
-  top: 50%;
   background: rgb(32,32,32);
 }
 .navigationButton{
