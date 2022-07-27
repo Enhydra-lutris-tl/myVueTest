@@ -1,9 +1,9 @@
 <template>
   <div class="navigationBigBox" ref="navigationBigBox">
     <div class="unfoldButton" @click="navigationShrink">
-      <div>&lt;</div>
+      <div ref="buttonArrow">&lt;</div>
     </div>
-    <div class="navigationBox" v-show="mm">
+    <div class="navigationBox">
       <router-link to='/IndexBody' class="navigationButton" active-class="active">首页</router-link>
       <router-link to='/IndexHomePage' class="navigationButton" active-class="active">主页</router-link>
       <router-link to="/IndexNotes" class="navigationButton" active-class="active">笔记</router-link>
@@ -43,10 +43,12 @@ export default {
   methods: {
     navigationShrink(){
       if (this.mm === false){
-        this.$refs.navigationBigBox.style.right = '2%'
+        this.$refs.navigationBigBox.style.right = '1%'
+        this.$refs.buttonArrow.style.transform = 'rotate(180deg)'
         this.mm = true
       }else if (this.mm === true){
-        this.$refs.navigationBigBox.style.right = '0'
+        this.$refs.navigationBigBox.style.right = '-50px'
+        this.$refs.buttonArrow.style.transform = 'rotate(0deg)'
         this.mm = false
       }
 
@@ -252,26 +254,28 @@ canvas{
   position: absolute;
   display: flex;
   z-index: 3;
-  right: 0;
-  top: 50%;
+  right: -50px;
+  top: calc(50% - 120px);
   transition: right 1s;
 }
 .unfoldButton{
   height: 60px;
-  width: 20px;
+  width: 30px;
+  border-radius: 4px 0 0 4px;
   background: rgb(32,32,32);
 }
 .unfoldButton div{
   margin-top: 20px;
   height: 20px;
   line-height: 20px;
+  transition: 0.3s;
 }
 .navigationBox{
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   width: 50px;
-  border-radius: 4px;
+  border-radius: 0 4px 4px 4px;
   background: rgb(32,32,32);
 }
 .navigationButton{
