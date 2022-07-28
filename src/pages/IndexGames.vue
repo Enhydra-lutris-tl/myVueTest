@@ -1,17 +1,18 @@
 <template>
   <div class="back">
     <div class="menuBOX">
-      <el-menu>
+      <el-menu router>
         <el-sub-menu index="1">
           <template #title>
             <span>明日方舟</span>
           </template>
-          <el-menu-item index="1-1">阵营</el-menu-item>
-          <el-menu-item index="1-2">角色</el-menu-item>
-          <el-sub-menu index="1-3">
+          <el-menu-item index="1-1" route="/IndexGames">世界观</el-menu-item>
+          <el-menu-item index="1-2" route="/IndexGames">阵营</el-menu-item>
+          <el-menu-item index="1-3" route="/IndexGames/GameCharacter">角色</el-menu-item>
+          <el-sub-menu index="1-4">
             <template #title>故事</template>
-            <el-menu-item index="1-3-1">三级标题1</el-menu-item>
-            <el-menu-item index="1-3-2">三级标题1</el-menu-item>
+            <el-menu-item index="1-4-1">主线</el-menu-item>
+            <el-menu-item index="1-4-2">故事集</el-menu-item>
           </el-sub-menu>
         </el-sub-menu>
         <el-sub-menu index="2">
@@ -28,15 +29,17 @@
         </el-sub-menu>
       </el-menu>
     </div>
-    <gameCharacter></gameCharacter>
+    <router-view v-slot="{Component}">
+      <transition name="indexGames">
+        <component :is="Component"/>
+      </transition>
+    </router-view>
   </div>
 </template>
 
 <script>
-import GameCharacter from "@/components/gameCharacter";
 export default {
   name: "IndexGames",
-  components: {GameCharacter}
 }
 </script>
 
@@ -53,5 +56,23 @@ export default {
   background: #2a2727;
   width: 10%;
   height: 100%;
+  overflow: hidden;
+}
+.indexGames-enter-active,
+.indexGames-leave-active{
+  transition: all 0.5s ease-out;
+}
+.indexGames-enter-from{
+  position: absolute;
+  top: 100%;
+}
+.indexGames-enter-to,
+.indexGames-leave-from{
+  position: absolute;
+  top: 0;
+}
+.indexGames-leave-to{
+  position: absolute;
+  top: -100%;
 }
 </style>
