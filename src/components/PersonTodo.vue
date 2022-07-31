@@ -236,6 +236,7 @@
                 v-for="todoTag in todoTags" :key="todoTag.title"
                 :title="todoTag.title"
                 :color="todoTag.color"
+                :tagChecked="todoTag.tagChecked"
                 @tagClick="tagClick"
                 @tagsDelete="tagsDelete(todoTag.title)"
             >
@@ -327,11 +328,6 @@ export default {
       //   },
       // ],
       lists:JSON.parse(localStorage.getItem('lists')),
-      // todoTags:[
-      //     {title:'工作',color:'#67C23A',tagChecked:false},
-      //     {title:'个人',color:'#E6A23C',tagChecked:false},
-      //     {title:'日常',color:'#909399',tagChecked:false},
-      // ],
       todoTags:JSON.parse(localStorage.getItem('todoTags')),
       defaultTime:[
           new Date(2000,1,1,0,0,0),
@@ -409,6 +405,20 @@ export default {
     }
 
   },
+  beforeCreate(){
+    if (!JSON.parse(localStorage.getItem('lists'))){
+        var lists = []
+        localStorage.setItem('lists',JSON.stringify(lists))
+    }
+    if(!JSON.parse(localStorage.getItem('todoTags'))){
+      var todoTags = [
+          {title:'工作',color:'#67C23A',tagChecked:false},
+          {title:'个人',color:'#E6A23C',tagChecked:false},
+          {title:'日常',color:'#909399',tagChecked:false},
+      ]
+      localStorage.setItem('todoTags',JSON.stringify(todoTags))
+    }
+  },
 
   methods:{
     // 提交新建todo表单数据，并添加到lists中
@@ -450,13 +460,17 @@ export default {
           message:`Tag:[${this.newTag.title}]已添加`,
           type:'success'
         })
+        // 清除其他标签已选中状态
+        for (let a = 0; a < this.todoTags.length; a++){
+          this.todoTags[a].tagChecked = false
+        }
+      //提交到本地存储
         localStorage.setItem('todoTags',JSON.stringify(this.todoTags))
         for (let key in this.newTag){
           if (this.newTag[key] !== this.newTag['tagChecked']){
             this.newTag[key] = ''
           }
         }
-
         this.tagAdd()
       }
 
@@ -472,10 +486,10 @@ export default {
     },
 
     //tag触发事件
-    tagClick(a,b){
+    tagClick(a){
       for (let i=0; i < this.todoTags.length;i++){
-        if (this.todoTags[i].title===b){
-          this.todoTags[i].tagChecked = a
+        if (this.todoTags[i].title===a){
+          this.todoTags[i].tagChecked = !this.todoTags[i].tagChecked
         }
       }
     },

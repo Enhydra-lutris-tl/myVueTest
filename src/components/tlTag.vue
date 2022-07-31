@@ -4,22 +4,28 @@
        type="checkbox"
        :id="title"
        v-show="false"
-       v-model="modelValue"
+       :checked="tagChecked"
        @change="tagChange"
        ref="checkbox"
    />
-   <label :for="title" class="tagLabel" >{{title}}</label>
-   <button type="button" class="tagDelete" @click="tagDelete" v-show="!modelValue">x</button>
+   <label :for="title" :class="'tagLabel ' + tagLabelClass" >{{title}}</label>
+   <button type="button" class="tagDelete" @click="tagDelete" v-show="!tagChecked">x</button>
  </div>
 </template>
 
 <script>
 export default {
   name: "tlTag",
-  props: ['title','color'],
-  data(){
-    return{
-      modelValue:false
+  props: ['title','color','tagChecked'],
+  computed:{
+    tagLabelClass(){
+      let x = ''
+      if (this.tagChecked !== true){
+        x = 'offChecked'
+      }else {
+        x = 'onChecked'
+      }
+      return x
     }
   },
   mounted() {
@@ -27,12 +33,7 @@ export default {
   },
   methods:{
     tagChange(){
-      this.$emit('tagClick',this.modelValue,this.title)
-      if (this.$refs.checkbox.checked){
-        this.$refs.tagLabel.style.border = '#79bbff solid 2px'
-      }else {
-        this.$refs.tagLabel.style.border = 'none'
-      }
+      this.$emit('tagClick',this.title)
     },
     tagDelete(){
       if (confirm('是否删除标签？删除后不可恢复！')){
@@ -58,6 +59,12 @@ export default {
   border-radius: 4px;
   line-height: 20px;
   font-size: 12px;
+}
+.onChecked{
+  border: #79bbff solid 2px;
+}
+.offChecked{
+  border: none;
 }
 .tagDelete{
   border: none;

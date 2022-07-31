@@ -1,11 +1,11 @@
-import {createRouter,createWebHistory} from 'vue-router'
+import {createRouter,createWebHashHistory} from 'vue-router'
 import IndexHomePage from '../pages/IndexHomePage'
 import IndexBody from "@/pages/IndexBody";
 import IndexNotes from "@/pages/IndexNotes"
 import NoteContent from "@/pages/NoteContent";
 import IndexGames from "@/pages/IndexGames";
 import GameCharacter from "@/pages/GameCharacter"
-const routerWebHistory = createWebHistory()
+const routerWebHistory = createWebHashHistory()
 
 const router = createRouter({
     history:routerWebHistory,
@@ -37,6 +37,7 @@ const router = createRouter({
         {
             path:'/IndexGames',
             component:IndexGames,
+            redirect:'/IndexGames/GameCharacter',
             children:[
                 {
                     path: '/IndexGames/GameCharacter',
