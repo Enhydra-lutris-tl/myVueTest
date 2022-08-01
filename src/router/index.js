@@ -5,6 +5,7 @@ import IndexNotes from "@/pages/IndexNotes"
 import NoteContent from "@/pages/NoteContent";
 import IndexGames from "@/pages/IndexGames";
 import GameCharacter from "@/pages/GameCharacter"
+import Jx3Watch from "@/pages/Jx3Watch";
 const routerWebHistory = createWebHashHistory()
 
 const router = createRouter({
@@ -42,7 +43,12 @@ const router = createRouter({
                 {
                     path: '/IndexGames/GameCharacter',
                     component: GameCharacter,
+                },
+                {
+                    path: '/IndexGames/Jx3Watch',
+                    component: Jx3Watch
                 }
+
             ]
         }
 

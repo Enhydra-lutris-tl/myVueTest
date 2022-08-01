@@ -283,7 +283,8 @@ export default {
 
 <style scoped>
 .gameBack{
-  position: relative;
+  position: absolute;
+  left: 10%;
   width: 90%;
   height: 100%;
   overflow: hidden;
@@ -348,13 +349,13 @@ export default {
   display: flex;
 }
 .characterClothesButton{
-  background: #404040;
+  background: rgb(42,39,39);
   padding: 5px 10px 5px 10px;
   box-sizing: border-box;
   transition: 0.3s;
 }
 .characterClothesButton:hover{
-  background: white;
+  background: rgb(69, 69, 69);
 }
 .characterSynopsisCard{
   background: rgba(42, 39, 39, 0.46);

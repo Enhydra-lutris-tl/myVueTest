@@ -27,6 +27,18 @@
             <el-menu-item index="2-3-2">三级标题1</el-menu-item>
           </el-sub-menu>
         </el-sub-menu>
+        <el-sub-menu index="3">
+          <template #title>
+            <span>剑网三</span>
+          </template>
+          <el-menu-item index="/IndexGames/Jx3Watch">首页</el-menu-item>
+          <el-menu-item index="3-2">其他</el-menu-item>
+          <el-sub-menu index="3-3">
+            <template #title>故事</template>
+            <el-menu-item index="3-3-1">三级标题1</el-menu-item>
+            <el-menu-item index="3-3-2">三级标题1</el-menu-item>
+          </el-sub-menu>
+        </el-sub-menu>
       </el-menu>
     </div>
     <router-view v-slot="{Component}">
@@ -63,16 +75,13 @@ export default {
   transition: all 0.5s ease-out;
 }
 .indexGames-enter-from{
-  position: absolute;
   top: 100%;
 }
 .indexGames-enter-to,
 .indexGames-leave-from{
-  position: absolute;
   top: 0;
 }
 .indexGames-leave-to{
-  position: absolute;
   top: -100%;
 }
 </style>
