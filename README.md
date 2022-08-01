@@ -26,7 +26,8 @@ componets目录
 ```
 1. 优化了明日方舟板块的导航，和基础的人物展示框架
 2. 构建了剑网三开服信息/日常展示页面  
-数据来源于接口 [https://www.jx3api.com](https://www.jx3api.com)
+数据来源于接口 [https://www.jx3api.com] [1]
+[1]:https://www.jx3api.com
 3. 优化TodoTag数据结构
 ```
 ### 2022.07.24
