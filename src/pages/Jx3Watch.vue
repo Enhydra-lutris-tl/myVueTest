@@ -165,7 +165,8 @@ export default {
   flex-wrap: wrap;
   width: 300px;
   height: 60px;
-  margin-bottom: 15px;
+  margin: 5px 0 15px 1%;
+  border: solid 1px var(--el-border-color);
 }
 .explain{
   display: flex;
@@ -195,7 +196,7 @@ export default {
 .jx3ServerBox .getButton{
   position: absolute;
   bottom: 15px;
-  right: 15px;
+  right: 1%;
 }
 .jx3DoEverydayBox{
   position: absolute;
@@ -206,14 +207,14 @@ export default {
 .DoEverydayList{
   display: flex;
   box-sizing: border-box;
-  border: solid 1px var(--el-border-color);
+  border-bottom: solid 1px var(--el-border-color);
+
 }
 .doEverydayTitle{
   background: #404040;
   text-align: right;
   min-width: 70px;
   padding: 5px 15px 5px 10px;
-  border: solid 1px var(--el-border-color);
 }
 .doEverydayText{
   text-align: left;
