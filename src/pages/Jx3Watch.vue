@@ -200,8 +200,9 @@ export default {
 }
 .jx3DoEverydayBox{
   position: absolute;
+  left: 28%;
   border: solid 1px var(--el-border-color);
-  top: 500px;
+  top: 300px;
   min-width: 385px;
 }
 .DoEverydayList{
